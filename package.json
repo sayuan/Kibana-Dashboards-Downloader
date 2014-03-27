@@ -1,0 +1,19 @@
+{
+  "name": "kdd",
+  "version": "0.1.1",
+  "main": "kdd",
+  "description": "Kibana Dashboards Downloads",
+  "license": "MIT",
+  "bin": {
+    "kdd": "./kdd"
+  },
+  "dependencies": {
+    "request": "^2.34.0",
+    "mkdirp": "^0.3.5"
+  },
+  "author": "Shiao-An Yuan <shiao.an.yuan@gmail.com>" ,
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/sayuan/Kibana-Dashboards-Downloader.git"
+  }
+}

@@ -1,0 +1,4 @@
+{
+    "indexUrl": "http://localhost:9200/kibana-int/",
+    "dashboardDir": "./dashboards"
+}

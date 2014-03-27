@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+"use strict";
+
+var fs = require("fs");
+var mkdirp = require('mkdirp');
+var request = require("request");
+
+var config;
+try {
+    config = require('./config.json');
+}
+catch (e) {
+    config = {
+        "indexUrl": "http://localhost:9200/kibana-int/",
+        "dashboardDir": "./dashboards"
+    }
+}
+
+var handleDashboard = function (doc) {
+    var name = doc.title;
+    var dashboard = doc.dashboard;
+    // pretty print the JSON data
+    dashboard = JSON.stringify(JSON.parse(doc.dashboard), null, 2);
+    fs.writeFile(config.dashboardDir+"/"+name+".json", dashboard, function(err) {
+        if (err) {
+            console.error("Saving the dashboard %s failed: ", name, err);
+        }
+    });
+};
+
+var handler = function (data) {
+    mkdirp(config.dashboardDir, function (err) {
+        JSON.parse(data).hits.hits.forEach(function (hit) {
+            handleDashboard(hit._source);
+        });
+    });
+}
+
+var main = function () {
+    var options = {
+        "url": config.indexUrl+"dashboard/_search?size=1000",
+    };
+    request(options, function (err, response, data) {
+        if (err) {
+            console.error("Retrieve dashboards failed: ", err);
+            process.exit(2);
+        } else {
+            handler(data);
+        }
+    });
+};
+
+if (require.main === module) {
+    main();
+}
